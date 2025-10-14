@@ -19,7 +19,8 @@ export interface UseNotificationsReturn {
 // Configurazione handler notifiche - spostato fuori dal componente per evitare reinizializzazioni
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
   }),
@@ -39,6 +40,24 @@ export const useExpoNotifications = ({
     useState<NotificationPermissionStatus | null>(null);
 
   // Memoizzazione della funzione di registrazione
+  const resolvePermissionStatus = useCallback(
+    (
+      permissions: Notifications.NotificationPermissionsStatus
+    ): NotificationPermissionStatus => {
+      const { granted, canAskAgain } = permissions as unknown as {
+        granted: boolean;
+        canAskAgain: boolean;
+      };
+
+      if (granted) {
+        return "granted";
+      }
+
+      return canAskAgain ? "undetermined" : "denied";
+    },
+    []
+  );
+
   const registerForPushNotificationsAsync = useCallback(async (): Promise<
     string | undefined
   > => {
@@ -52,19 +71,21 @@ export const useExpoNotifications = ({
     }
 
     if (!Device.isDevice) {
+      setPermissionStatus("undetermined");
       return undefined;
     }
 
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    const finalStatus =
-      existingStatus !== "granted"
-        ? (await Notifications.requestPermissionsAsync()).status
-        : existingStatus;
+    const existingPermissions = await Notifications.getPermissionsAsync();
+    const existingStatus = resolvePermissionStatus(existingPermissions);
+    const permissions =
+      existingStatus === "granted"
+        ? existingPermissions
+        : await Notifications.requestPermissionsAsync();
 
-    setPermissionStatus(finalStatus as NotificationPermissionStatus);
+    const normalizedStatus = resolvePermissionStatus(permissions);
+    setPermissionStatus(normalizedStatus);
 
-    if (finalStatus !== "granted") {
+    if (normalizedStatus !== "granted") {
       return undefined;
     }
 
@@ -73,7 +94,7 @@ export const useExpoNotifications = ({
     });
 
     return token;
-  }, []);
+  }, [resolvePermissionStatus]);
 
   // Memoizzazione della funzione di salvataggio token
   const saveTokenToFirestore = useCallback(
@@ -137,8 +158,8 @@ export const useExpoNotifications = ({
 
     // Cleanup function
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
-      Notifications.removeNotificationSubscription(responseListener);
+      notificationListener.remove();
+      responseListener.remove();
     };
   }, [setNotification]);
 

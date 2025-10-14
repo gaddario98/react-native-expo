@@ -1,6 +1,6 @@
 {
   "name": "@gaddario98/expo",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "type": "module",
@@ -10,24 +10,33 @@
     "build": "rollup -c"
   },
   "devDependencies": {
+    "@gaddario98/react-native-ui": "^1.0.20",
+    "@gaddario98/react-queries": "^1.0.16",
+    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
     "@types/rollup-plugin-peer-deps-external": "^2",
+    "babel-plugin-react-compiler": "1",
+    "expo-device": "^8.0.9",
+    "expo-notifications": "^0.32.12",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-native": "^0.82.0",
     "rollup": "^4.40.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
-    "@gaddario98/react-native-ui": "*",
-    "@gaddario98/react-queries": "*",
-    "@tanstack/react-query": "*",
-    "@types/react": "*",
-    "@types/react-dom": "*",
-    "expo-device": "*",
-    "expo-notifications": "*",
-    "react": "*",
-    "react-native": "*"
+    "@gaddario98/react-native-ui": "^1.0.20",
+    "@gaddario98/react-queries": "^1.0.16",
+    "expo-device": "^8.0.9",
+    "expo-notifications": "^0.32.12",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-native": "^0.82.0"
   },
   "files": [
     "dist"
