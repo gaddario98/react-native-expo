@@ -1,6 +1,6 @@
 {
   "name": "@gaddario98/expo",
-  "version": "1.0.15",
+  "version": "1.0.17",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
