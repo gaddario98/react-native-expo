@@ -8,7 +8,7 @@
   "react-native": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c rollup.config.js && rollup -c rollup.dts.config.js",
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
@@ -53,6 +53,12 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
+      "import": "./dist/hooks/index.mjs",
+      "require": "./dist/hooks/index.js",
+      "default": "./dist/hooks/index.js"
     }
   },
   "repository": {
